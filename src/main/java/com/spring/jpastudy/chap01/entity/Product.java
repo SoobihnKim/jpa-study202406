@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@ToString
+@ToString(exclude = "nickName") // 닉네임 제외 (여러개 하려면 { , })
 @EqualsAndHashCode(of = "id") // 필드명
 @NoArgsConstructor
 @AllArgsConstructor
@@ -60,5 +60,7 @@ public class Product {
             this.category = Category.FOOD;
         }
     }
+
+
 
 }

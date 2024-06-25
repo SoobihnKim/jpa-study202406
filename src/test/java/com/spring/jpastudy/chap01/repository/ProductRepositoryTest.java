@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.spring.jpastudy.chap01.entity.Product.Category.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -67,7 +69,7 @@ class ProductRepositoryTest {
     }
 
     @Test
-    @DisplayName("1번 상품을 삭제한다")
+    @DisplayName("1번 상품을 삭제한다.")
     void deleteTest() {
         //given
         Long id = 1L;
@@ -76,6 +78,35 @@ class ProductRepositoryTest {
         //then
         Product foundProduct = productRepository.findById(id).orElse(null);
         assertNull(foundProduct);
+    }
+
+    @Test
+    @DisplayName("3번 상품을 단일조회하면 그 상품명이 구두이다.")
+    void findOneTest() {
+        //given
+        Long id = 3L;
+        //when
+        Product foundProduct = productRepository.findById(id).orElse(null);
+        //then
+        assertEquals("구두", foundProduct.getName());
+        System.out.println("foundProduct= " + foundProduct);
+    }
+
+    @Test
+    @DisplayName("상품을 전체조회하면 상품의 총 개수가 4개이다.")
+    void findAllTest() {
+        //given
+
+        //when
+        List<Product> productList = productRepository.findAll();
+        //then
+        System.out.println("\n\n");
+
+        productList.forEach(System.out::println);
+
+        System.out.println("\n\n");
+        assertEquals(4, productList.size());
+
     }
 
 
