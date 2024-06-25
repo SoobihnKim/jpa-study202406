@@ -51,4 +51,14 @@ public class Product {
         FOOD, FASHION, ELECTRONIC
     }
 
+    // 컬럼 기본값 설정
+    @PrePersist
+    public void prePersist() {
+        if(this.price == 0) {
+            this.price = 10000;
+        } if (this.category == null) {
+            this.category = Category.FOOD;
+        }
+    }
+
 }
