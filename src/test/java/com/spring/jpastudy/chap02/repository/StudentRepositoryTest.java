@@ -47,7 +47,7 @@ class StudentRepositoryTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("dummy test")
     void dummyTest() {
         //given
 
