@@ -85,6 +85,12 @@ class EmployeeRepositoryTest {
         // employee = Employee(id=2, name=어피치, department=Department(id=1, name=영업부))
         System.out.println("\n\n\n");
 
+        // 필요한 시점에 부서정보 가져옴 (LAZY)
+        Department department = employee.getDepartment();
+        System.out.println("\n\n\n");
+        System.out.println("department = " + department);
+        System.out.println("\n\n\n");
+
     }
 
 
