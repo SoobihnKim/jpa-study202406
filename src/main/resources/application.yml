@@ -21,16 +21,17 @@ spring:
         format_sql: true # SQL ?? ??? ??? ??
       database: mysql
 
-    #    log level setting
-    logging:
-      level:
-        root: info
-        com:
-          spring:
-            jpastudy: debug
-        org:
-          hibernate:
-            SQL: debug
+# log level setting
+logging:
+  level:
+    root: info
+    com:
+      spring:
+        jpastudy: debug
+    org:
+      hibernate:
+        SQL: debug
+
 
 
 
