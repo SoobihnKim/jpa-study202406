@@ -54,7 +54,6 @@ class DepartmentRepositoryTest {
 
         // 1번 부서 정보 조회
         Department department = departmentRepository.findById(1L).orElseThrow();
-
         //when
 
         /*
@@ -85,6 +84,58 @@ class DepartmentRepositoryTest {
         Employee(id=1, name=라이옹)
         Employee(id=2, name=어피치)
         Employee(id=3, name=프로도)
+         */
+    }
+
+    @Test
+    @DisplayName("고아 객체 삭제하기")
+    void orphanRemovalTest() {
+        //given
+        // 1번 부서 조회
+        Department department = departmentRepository.findById(1L).orElseThrow();
+
+        // 1번 부서 사원 목록 가져오기
+        List<Employee> employeeList = department.getEmployees();
+
+        // 2번 사원 조회
+        Employee employee = employeeList.get(1);
+
+        //when
+        // 부서목록에서 사원 삭제
+//        employeeList.remove(employee); // db는 그대로, 이렇게만해선 반영안되고
+//        employee.setDepartment(null); // 반대편에서도 해야함
+        // 위 두줄을 한번에
+        department.removeEmployee(employee);
+
+        // 갱신 반영(안해도 지워짐)
+//        departmentRepository.save(department);
+
+        //then
+
+    }
+
+    @Test
+    @DisplayName("양방향 관계에서 리스트에 데이터를 추가하면 DB에도 INSERT된다.")
+    void cascadePersistTest() {
+        //given
+        // 2번부서 조회
+        Department department = departmentRepository.findById(2L).orElseThrow();
+
+        // 새로운 사원 생성
+        Employee employee = Employee.builder()
+                .name("뽀로로")
+                .build();
+        //when
+        department.addEmployee(employee);
+
+        //then
+        /*
+        insert
+            into
+        tbl_emp
+        (dept_id, emp_name)
+            values
+                (?, ?)
          */
 
     }

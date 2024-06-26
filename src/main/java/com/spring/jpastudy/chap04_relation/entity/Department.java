@@ -36,8 +36,17 @@ public class Department {
      */
 
     // @OneToMany 기본값 LAZY
-    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY) // 상대방을 나를 뭘로 매핑했는지
+    @OneToMany(mappedBy = "department", orphanRemoval = true, cascade = CascadeType.ALL) // 상대방을 나를 뭘로 매핑했는지
     private List<Employee> employees = new ArrayList<>();
 
 
+    public void removeEmployee(Employee employee) {
+        this.employees.remove(employee);
+        employee.setDepartment(null);
+    }
+
+    public void addEmployee(Employee employee) {
+        this.employees.add(employee);
+        employee.setDepartment(this); // 반대쪽에도 세팅 해야함
+    }
 }
