@@ -31,10 +31,15 @@ public class Employee {
     @JoinColumn(name = "dept_id") // 상대방의 PK 컬럼명
     private Department department;
 
+
 //    @ManyToOne
 //    @JoinColumn(name = "receive_dept_id")
 //    private Department department2;
 
+    public void changeDepartment(Department department) {
+        this.department = department;
+        department.getEmployees().add(this);
+    }
 
 
 }
