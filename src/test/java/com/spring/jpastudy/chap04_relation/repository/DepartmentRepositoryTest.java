@@ -101,7 +101,7 @@ class DepartmentRepositoryTest {
         Employee employee = employeeList.get(1);
 
         //when
-        // 부서목록에서 사원 삭제
+        // 부서목록에서 사원 삭제 (부서가 부모, 사원이 자식)
 //        employeeList.remove(employee); // db는 그대로, 이렇게만해선 반영안되고
 //        employee.setDepartment(null); // 반대편에서도 해야함
         // 위 두줄을 한번에
@@ -130,13 +130,23 @@ class DepartmentRepositoryTest {
 
         //then
         /*
-        insert
-            into
-        tbl_emp
-        (dept_id, emp_name)
-            values
-                (?, ?)
+        insert into tbl_emp
+          (dept_id, emp_name)
+        values  (?, ?)
          */
+    }
+
+    @Test
+    @DisplayName("부서가 사라지면 해당 사원들도 함께 사라진다.")
+    void cascadeRemoveTest() {
+        //given
+        Department department = departmentRepository.findById(2L).orElseThrow();
+
+        //when
+//        departmentRepository.deleteById(department.getId()); 아래와 같음
+        departmentRepository.delete(department);
+
+        //then
 
     }
 
