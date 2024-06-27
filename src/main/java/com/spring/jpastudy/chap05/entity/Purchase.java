@@ -14,7 +14,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "tbl_mtm_purchase")
-public class Purchase {
+public class Purchase { // 중간 테이블
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
