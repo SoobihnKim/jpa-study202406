@@ -148,7 +148,7 @@ class QueryDslBasicTest {
     @DisplayName("조회 결과 반환하기")
     void fetchTest() {
 
-       // 리스트 조회(다중행 조회 fetch)
+        // 리스트 조회(다중행 조회 fetch)
         List<Idol> idolList = factory
                 .select(idol)
                 .from(idol)
@@ -178,8 +178,172 @@ class QueryDslBasicTest {
 
         System.out.println("\n\n=========== fetchOne (Optional) =============");
         System.out.println("foundIdol2 = " + foundIdol2);
-
-
     }
 
-}
+    /*
+    ### 연습문제
+     */
+
+    @Test
+    @DisplayName("나이가 24세 이상인 아이돌을 조회")
+    void findTest() {
+        //given
+        int age = 24;
+        //when
+        List<Idol> idolList = factory
+                .select(idol)
+                .from(idol)
+                .where(idol.age.goe(age))
+                .fetch();
+        //then
+        System.out.println("\n\n\n\n");
+        idolList.forEach(System.out::println);
+        System.out.println("\n\n\n\n");
+    }
+    /*
+    @Test
+    @DisplayName("나이가 24세 이상인 아이돌 조회")
+    void testAgeGoe() {
+        // given
+        int ageThreshold = 24;
+
+        // when
+        List<Idol> result = factory
+                .selectFrom(idol)
+                .where(idol.age.goe(ageThreshold))
+                .fetch();
+
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("\n\nIdol: " + idol);
+            assertTrue(idol.getAge() >= ageThreshold);
+        }
+    }
+     */
+
+    @Test
+    @DisplayName("이름에 \"김\"이라는 문자열이 포함된 아이돌을 조회")
+    void findKimTest() {
+        //given
+
+        //when
+        List<Idol> idolList = factory
+                .select(idol)
+                .from(idol)
+                .where(idol.idolName.like("%김%"))
+                .fetch();
+        //then
+        System.out.println("\n\n\n\n");
+        idolList.forEach(System.out::println);
+        System.out.println("\n\n\n\n");
+
+    }
+    /*
+    @Test
+    @DisplayName("이름에 '김'이 포함된 아이돌 조회")
+    void testNameContains() {
+        // given
+        String substring = "김";
+
+        // when
+        List<Idol> result = factory
+                .selectFrom(idol)
+                .where(idol.idolName.contains(substring))
+                .fetch();
+
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("Idol: " + idol);
+            assertTrue(idol.getIdolName().contains(substring));
+        }
+    }
+     */
+
+    @Test
+    @DisplayName("나이가 20세에서 25세 사이인 아이돌")
+    void findByAgeTest() {
+        //given
+
+        //when
+        List<Idol> idolList = factory
+                .select(idol)
+                .from(idol)
+                .where(idol.age.between(20, 25))
+                .fetch();
+        //then
+        System.out.println("\n\n\n\n");
+        idolList.forEach(System.out::println);
+        System.out.println("\n\n\n\n");
+
+    }
+    /*
+     @Test
+    @DisplayName("나이가 20세에서 25세 사이인 아이돌 조회")
+    void testAgeBetween() {
+        // given
+        int ageStart = 20;
+        int ageEnd = 25;
+
+        // when
+        List<Idol> result = factory
+                .selectFrom(idol)
+                .where(idol.age.between(ageStart, ageEnd))
+                .fetch();
+
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("Idol: " + idol);
+            assertTrue(idol.getAge() >= ageStart && idol.getAge() <= ageEnd);
+        }
+    }
+     */
+
+    @Test
+    @DisplayName("그룹이름이 문자열 \"르세라핌\"인 아이돌을 조회")
+    void groupTest() { // 실제 sql은 join 해야함
+        //given
+        String groupName = "르세라핌";
+        //when
+        List<Idol> idolList = factory
+                .selectFrom(idol)
+                .where(idol.group.groupName.eq(groupName))
+                .fetch();
+
+        //then
+        assertFalse(idolList.isEmpty());
+        for (Idol idol : idolList) {
+            System.out.println("Idol: " + idol);
+            assertEquals(groupName, idol.getGroup().getGroupName());
+
+            System.out.println("\n\n\n\n");
+            idolList.forEach(System.out::println);
+            System.out.println("\n\n\n\n");
+
+        }
+
+    /*
+     @Test
+    @DisplayName("르세라핌 그룹에 속한 아이돌 조회")
+    void testGroupEquals() {
+        // given
+        String groupName = "르세라핌";
+
+        // when
+        List<Idol> result = factory
+                .selectFrom(idol)
+                .where(idol.group.groupName.eq(groupName))
+                .fetch();
+
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("Idol: " + idol);
+            assertEquals(groupName, idol.getGroup().getGroupName());
+        }
+    }
+     */
+
+    }
