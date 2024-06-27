@@ -44,6 +44,7 @@ public class Department {
 
     // @OneToMany 기본값 LAZY
     @OneToMany(mappedBy = "department", orphanRemoval = true, cascade = CascadeType.ALL) // 상대방을 나를 뭘로 매핑했는지
+    @Builder.Default
     private List<Employee> employees = new ArrayList<>();
 
     public void removeEmployee(Employee employee) {
