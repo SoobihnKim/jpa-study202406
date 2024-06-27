@@ -2,6 +2,7 @@ package com.spring.jpastudy.chap04_relation.repository;
 
 import com.spring.jpastudy.chap04_relation.entity.Department;
 import com.spring.jpastudy.chap04_relation.entity.Employee;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,27 @@ class DepartmentRepositoryTest {
 
     @Autowired
     DepartmentRepository departmentRepository;
+
+    //    @BeforeEach
+    void bulkInsert() {
+
+        for (int j = 1; j <= 10; j++) {
+            Department dept = Department.builder()
+                    .name("부서" + j)
+                    .build();
+
+            departmentRepository.save(dept);
+
+            for (int i = 1; i <= 100; i++) {
+                Employee employee = Employee.builder()
+                        .name("사원" + i)
+                        .department(dept)
+                        .build();
+
+                employeeRepository.save(employee);
+            }
+        }
+    }
 
     @Test
     @DisplayName("특정 부서를 조회하면 해당 소속부서원들이 함께 조회된다.")
@@ -145,9 +167,52 @@ class DepartmentRepositoryTest {
         //when
 //        departmentRepository.deleteById(department.getId()); 아래와 같음
         departmentRepository.delete(department);
-
         //then
+    }
 
+    @Test
+    @DisplayName("N + 1 문제")
+    void nPlusOneTest() {
+        //given
+        // 1개의 쿼리
+        // 모든 부서 조회
+        List<Department> department = departmentRepository.findAll();
+        //when
+        for (Department dept : department) {
+            List<Employee> employees = dept.getEmployees();
+            System.out.println("사원목록 가져옴:  " + employees.get(0).getName());
+        }
+        // 부서조회하고 사원 10개 쿼리 총 11개(LAZY 로딩)
+    }
+
+    @Test
+    @DisplayName("fetch join으로 n+1문제 해결하기")
+    void fetchJoinTest() {
+        //given
+
+        //when
+        List<Department> departments = departmentRepository.getFetchEmployees();
+
+        for (Department dept : departments) {
+            List<Employee> employees = dept.getEmployees();
+            System.out.println("사원목록 가져옴: " + employees.get(0).getName());
+        }
+        /*
+          select
+        department0_.dept_id as dept_id1_0_0_,
+        employees1_.emp_id as emp_id1_1_1_,
+        department0_.dept_name as dept_nam2_0_0_,
+        employees1_.dept_id as dept_id3_1_1_,
+        employees1_.emp_name as emp_name2_1_1_,
+        employees1_.dept_id as dept_id3_1_0__,
+        employees1_.emp_id as emp_id1_1_0__
+    from
+        tbl_dept department0_
+    inner join
+        tbl_emp employees1_
+            on department0_.dept_id=employees1_.dept_id
+            쿼리 한번만 나감
+         */
     }
 
 }
