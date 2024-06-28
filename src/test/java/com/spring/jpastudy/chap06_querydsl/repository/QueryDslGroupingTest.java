@@ -294,7 +294,6 @@ class QueryDslGroupingTest {
         for (GroupAverageAgeDto dto : result) {
             String groupName = dto.getGroupName();
             double averageAge = dto.getAverageAge();
-
             System.out.println("\n\nGroup: " + groupName + ", Average Age: " + averageAge);
         }
 
