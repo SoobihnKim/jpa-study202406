@@ -8,6 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -111,6 +114,42 @@ class QueryDslSortTest {
 
         System.out.println("\ntotalCount = " + totalCount);
         assertTrue(totalCount == 5);
+    }
+
+    @Test
+    @DisplayName("Spring의 Page 인터페이스를 통한 페이징 처리")
+    void pagingWithJpaTest() {
+        //given
+        Pageable pageInfo = PageRequest.of(0, 2);
+        //when
+        Page<Idol> pagedIdols = idolRepository.foundAllByPaging(pageInfo);
+        //then
+        assertNotNull(pagedIdols);
+        assertEquals(2, pagedIdols.getSize());
+
+        System.out.println("\n\n\n");
+        pagedIdols.getContent().forEach(System.out::println);
+        System.out.println("\n\n\n");
+
+    }
+    
+    /*
+    ### 연습문제
+
+1. 아이돌을 이름 기준으로 오름차순으로 정렬하여 조회하세요.
+2. 아이돌을 나이 기준으로 내림차순 정렬하고, 페이지당 3명씩 페이징 처리하여 1번째 페이지의 아이돌을 조회하세요.
+3. "아이브" 그룹의 아이돌을 이름 기준으로 오름차순 정렬하고, 페이지당 2명씩 페이징 처리하여 첫 번째 페이지의 아이돌을 조회하세요.
+     */
+    
+    @Test
+    @DisplayName("아이돌을 이름 기준으로 오름차순으로 정렬하여 조회")
+    void findByNameTest() {
+        //given
+        
+        //when
+        
+        //then
+        
     }
 
 }
