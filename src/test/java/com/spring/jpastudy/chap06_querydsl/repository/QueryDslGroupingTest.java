@@ -244,7 +244,7 @@ class QueryDslGroupingTest {
         }
 
         /*
-       select
+    select
         group1_.group_name as col_0_0_,
         avg(idol0_.age) as col_1_0_
     from
