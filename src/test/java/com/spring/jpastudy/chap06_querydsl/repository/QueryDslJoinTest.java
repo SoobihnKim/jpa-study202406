@@ -191,7 +191,6 @@ class QueryDslJoinTest {
                     , foundIdol.getIdolName(), foundGroup.getGroupName());
         });
 
-
     }
 
     /*
