@@ -24,6 +24,7 @@ public class Idol {
 
     private String gender; // 성별 추가
 
+    // LAZY 그룹 정보 달라고할 때만 줌
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
     private Group group;

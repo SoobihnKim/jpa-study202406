@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "tbl_group")
 @Setter @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(exclude = {"idols"})
+@ToString(exclude = {"idols", "albums"})
 @EqualsAndHashCode(of = "id")
 public class Group {
 
@@ -24,6 +24,10 @@ public class Group {
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Idol> idols = new ArrayList<>();
+
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Album> albums = new ArrayList<>();
+
 
     public Group(String groupName) {
         this.groupName = groupName;
