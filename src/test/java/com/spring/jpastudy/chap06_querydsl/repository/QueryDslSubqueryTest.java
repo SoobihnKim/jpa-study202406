@@ -233,7 +233,77 @@ class QueryDslSubqueryTest {
         }
     }
 
+    /*
+    ## 연습문제
 
+### 문제 1. 아이브의 평균 나이보다 나이가 많은 여자 아이돌의 이름과 나이 조회
+**힌트**:
+- 서브쿼리를 사용하여 아이브 그룹의 평균 나이를 계산합니다.
+- 메인 쿼리에서 이 평균 나이보다 나이가 많은 여자 아이돌을 조회합니다.
+     */
+
+    @Test
+    @DisplayName("아이브의 평균 나이보다 나이가 많은 여자 아이돌의 이름과 나이 조회")
+    void practice1Test() {
+        //given
+        String groupName = "아이브";
+
+        JPQLQuery<Double> subquery = JPAExpressions
+                .select(idol.age.avg())
+                .from(idol)
+                .where(idol.group.groupName.eq(groupName));
+        //when
+        List<Idol> result = factory
+                .select(idol)
+                .from(idol)
+                .where(idol.age.gt(subquery)
+                        .and(idol.gender.eq("여")))
+                .fetch();
+        //then
+        assertFalse(result.isEmpty());
+        for (Idol i : result) {
+            System.out.println("\nIdol: " + i.getIdolName() + ", Age: " + i.getAge());
+        }
+    }
+
+
+    /*
+    ### 문제 2: 2023년도에 발매된 앨범이 없는 그룹 조회
+**힌트**:
+- 서브쿼리를 사용하여 2023년도에 발매된 앨범이 없는 그룹을 조회합니다.
+     */
+
+    @Test
+    @DisplayName("특정 연도에 발매된 앨범이 없는 그룹 조회")
+    void testFindGroupsWithoutAlbumsInYear() {
+        int targetYear = 2023;
+
+        JPQLQuery<Long> subQuery = JPAExpressions
+                .select(album.group.id)
+                .from(album)
+                .where(album.releaseYear.eq(targetYear));
+
+        List<Group> result = factory
+                .selectFrom(group)
+                .where(group.id.notIn(subQuery))
+                .fetch();
+
+//        JPQLQuery<Long> subQuery = JPAExpressions
+//                .select(album.group.id)
+//                .from(album)
+//                .where(album.releaseYear.eq(targetYear)
+//                        .and(album.group.id.eq(group.id)));
+//
+//        List<Group> result = factory
+//                .selectFrom(group)
+//                .where(subQuery.notExists())
+//                .fetch();
+
+        assertFalse(result.isEmpty());
+        for (Group g : result) {
+            System.out.println("Group: " + g.getGroupName());
+        }
+    }
 
 
 
