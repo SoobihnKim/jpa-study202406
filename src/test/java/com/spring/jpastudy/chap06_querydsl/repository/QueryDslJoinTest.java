@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.spring.jpastudy.chap06_querydsl.entity.QAlbum.*;
 import static com.spring.jpastudy.chap06_querydsl.entity.QGroup.*;
 import static com.spring.jpastudy.chap06_querydsl.entity.QIdol.*;
 import static com.spring.jpastudy.chap06_querydsl.entity.QIdol.idol;
@@ -162,6 +163,108 @@ class QueryDslJoinTest {
         }
 
     }
+    /*
+    ### 문제 1.  ‘아이브’ 그룹에 속한 아이돌의 이름과 그룹명 조회
+- 힌트:
+1. `where`절을 사용하여 그룹 이름을 필터링하세요.
+2. `innerJoin`을 사용하여 아이돌과 그룹을 조인하세요.
+     */
+    @Test
+    @DisplayName("‘아이브’ 그룹에 속한 아이돌의 이름과 그룹명 조회")
+    void practice1Test() {
+        //given
+        String groupName = "아이브";
+        //when
+        List<Tuple> result = factory
+                .select(idol, group)
+                .from(idol)
+                .innerJoin(idol.group, group)
+                .where(group.groupName.eq(groupName))
+                .fetch();
 
+        //then
+        assertFalse(result.isEmpty());
+        result.forEach(tuple -> {
+            Idol foundIdol = tuple.get(idol);
+            Group foundGroup = tuple.get(group);
+            System.out.printf("\n# 이름: %s, 그룹명: %s\n\n"
+                    , foundIdol.getIdolName(), foundGroup.getGroupName());
+        });
+
+
+    }
+
+    /*
+    ### 문제2. 그룹별 평균 나이 계산하여 평균 나이가 22세 이상인 그룹의 그룹명과 평균나이 조회
+- 힌트
+1. `innerJoin`을 사용하여 아이돌과 그룹을 조인하세요.
+2. `groupBy`와`having`절을 사용하여 그룹화하고 조건을 설정하세요.
+3. `avg`메서드를 사용하여 평균 나이를 계산하세요.
+
+     */
+    @Test
+    @DisplayName("그룹별 평균 나이 계산하여 평균 나이가 22세 이상인 그룹의 그룹명과 평균나이 조회")
+    void practice2Test() {
+        //given
+
+        //when
+        List<Tuple> result = factory
+                .select(group.groupName, idol.age.avg())
+                .from(idol)
+                .innerJoin(idol.group, group)
+                .groupBy(group.id)
+                .having(idol.age.avg().goe(22))
+                .fetch();
+        //then
+        System.out.println("\n\n");
+        assertFalse(result.isEmpty());
+//        result.forEach(System.out::println);
+        result.forEach(tuple -> {
+            String groupName = tuple.get(group.groupName);
+            double averageAge = tuple.get(idol.age.avg());
+            System.out.printf("\n# 그룹명: %s, 평균나이: %.2f\n\n"
+                    , groupName, averageAge);
+        });
+        System.out.println("\n\n");
+
+    }
+
+    /*
+    ### 문제3. 2022년에 발매된 앨범이 있는 아이돌의 이름과 그룹명과 앨범명과 발매년도 조회
+- 힌트
+1. `innerJoin`을 2번 사용하여 아이돌과 그룹과 앨범을 조인하세요.
+2. `where`절을 사용하여 연도를 필터링하세요.
+     */
+
+    @Test
+    @DisplayName("2022년에 발매된 앨범이 있는 아이돌의 이름과 그룹명과 앨범명과 발매년도 조회")
+    void practice3Test() {
+        //given
+        int year = 2022;
+        //when
+        List<Tuple> result = factory
+//                .select(idol.idolName, group.groupName, album.albumName, album.releaseYear)
+                .select(idol, album)
+                .from(idol)
+                .innerJoin(idol.group, group)
+                .innerJoin(group.albums, album)
+                .where(album.releaseYear.eq(year))
+                .fetch();
+
+        //then
+        System.out.println("\n\n");
+        assertFalse(result.isEmpty());
+        result.forEach(tuple -> {
+            Idol foundIdol = tuple.get(idol);
+            Album foundAlbum = tuple.get(album);
+            System.out.printf("\n# 아이돌명: %s, 그룹명: %s, " +
+                            "앨범명: %s, 발매연도: %d년\n\n"
+                    ,foundIdol.getIdolName(), foundIdol.getGroup().getGroupName()
+                    , foundAlbum.getAlbumName(), foundAlbum.getReleaseYear());
+        });
+
+        System.out.println("\n\n");
+
+    }
 
 }
