@@ -19,14 +19,14 @@ public class EventService {
     private final EventRepository eventRepository;
 
     // 전체 조회 서비스
-    public List<Event> getEvents() {
-        return eventRepository.findAll();
+    public List<Event> getEvents(String sort) {
+        return eventRepository.findEvents(sort);
     }
 
     // 이벤트 등록
     public List<Event> saveEvent(EventSaveDto dto) {
         Event savedEvent = eventRepository.save(dto.toEntity());
         log.info("saved event: {}", savedEvent);
-        return getEvents();
+        return getEvents("date"); // 기본 날짜 정렬
     }
 }
