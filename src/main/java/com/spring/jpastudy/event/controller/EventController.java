@@ -54,4 +54,12 @@ public class EventController {
         return ResponseEntity.ok().body(eventDetail);
     }
 
+    // 삭제 요청
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity<?> delete(@PathVariable Long eventId) {
+
+        eventService.deleteEvent(eventId);
+        return ResponseEntity.ok().body("event deleted!");
+    }
+
 }
