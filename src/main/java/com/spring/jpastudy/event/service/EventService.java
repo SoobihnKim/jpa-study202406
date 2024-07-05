@@ -49,5 +49,13 @@ public class EventService {
         eventRepository.deleteById(id);
     }
 
+    // 이벤트 수정
+    public void modifyEvent(Long id, EventSaveDto dto) {
+        Event foundEvent = eventRepository.findById(id).orElseThrow();
+        foundEvent.changeEvent(dto);
+
+        eventRepository.save(foundEvent);
+    }
+
 
 }
