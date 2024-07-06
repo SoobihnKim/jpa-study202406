@@ -30,7 +30,7 @@ public class Event {
     @Column(name = "ev_desc")
     private String description; // 이벤트 설명
 
-    @Column(name = "ev_image_path")
+    @Column(name = "ev_image_path", length = 3000)
     private String image; // 이벤트 메인 이미지 경로
 
     @Column(name = "ev_start_date")

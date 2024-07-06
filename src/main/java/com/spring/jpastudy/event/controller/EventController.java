@@ -29,7 +29,6 @@ public class EventController {
         if(sort == null) {
             return ResponseEntity.badRequest().body("sort 파라미터가 없습니다.");
         }
-
         Map<String, Object> events = eventService.getEvents(pageNo, sort);
 
         // 의도적으로 2초 간의 로딩을 설정
